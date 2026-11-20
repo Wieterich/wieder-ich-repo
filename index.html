@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f1e9">
+<title>WIEDER ICH – Du bist mehr als deine Fallakte</title>
+<style>
+:root{--paper:#f5f1e9;--card:#fffdf8;--ink:#26332f;--muted:#66716b;--green:#31594c;--sage:#e3ebe3;--clay:#eadbd0;--line:#dcded5;--gold:#b78b52}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:18px max(22px,calc((100% - 1060px)/2));display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:16px}
+.brand{font-weight:800;letter-spacing:.16em;color:var(--green);font-size:1.05rem}.tag{font-size:.82rem;color:var(--muted)}
+nav{position:sticky;top:0;z-index:5;background:rgba(245,241,233,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;gap:6px;align-items:center;padding:9px max(12px,calc((100% - 1240px)/2))}
+nav a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:8px 10px;border-radius:99px;font-size:.88rem}nav a:hover,nav a:focus{background:var(--sage);color:var(--ink)}
+.quick-exit{margin-left:auto;flex-shrink:0;background:var(--clay);color:var(--ink);font-weight:600;border:1px solid #d5c3b5}
+.nav-links{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:thin}
+.quick-exit:hover{background:#dfcbbd}
+main{max-width:900px;margin:auto;padding:28px 20px 80px}
+.hero{padding:54px 0 40px;max-width:760px}
+h1{font:500 clamp(2.4rem,7vw,4.5rem)/1.06 Georgia,serif;letter-spacing:-.04em;margin:15px 0 22px}h2{font:500 clamp(1.8rem,4vw,2.6rem)/1.15 Georgia,serif;letter-spacing:-.025em;margin:0 0 16px}h3{font-size:1.1rem;margin:0 0 10px}p{margin:0 0 14px}.lead{font-size:1.16rem;max-width:680px;color:#43514b}.small{font-size:.9rem;color:var(--muted)}
+section{padding:44px 0;border-top:1px solid var(--line);scroll-margin-top:72px}.section-intro{max-width:700px;margin-bottom:24px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--green);font-weight:700;margin-bottom:6px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin:18px 0}.panel.green{background:var(--sage);border-color:#d3dfd4}.panel.clay{background:#f1e7df;border-color:#e7d8cc}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;width:100%;font:inherit;color:inherit;cursor:pointer;transition:border-color .2s, background .2s, transform .1s}
+.tile:hover{border-color:var(--green);background:#f3f7f3}
+.tile p{font-size:.95rem;color:#3d4a44;margin:0;line-height:1.6}
+.tile-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;width:100%}
+.pill{display:inline-block;background:var(--sage);color:var(--green);border-radius:99px;padding:4px 10px;font-size:.76rem;font-weight:700}
+.explore-hint{font-size:.78rem;color:var(--green);font-weight:600;margin-top:12px;display:inline-block}
+
+/* Modal Overlay */
+.modal-overlay{position:fixed;inset:0;background:rgba(38,51,47,0.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-content{background:var(--card);border:1px solid var(--line);border-radius:20px;max-width:720px;width:100%;max-height:85vh;overflow-y:auto;padding:32px;box-shadow:0 20px 40px rgba(0,0,0,0.12);transform:translateY(10px);transition:transform .25s ease}
+.modal-overlay.open .modal-content{transform:translateY(0)}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:16px}
+.modal-header h2{margin:0;font-size:1.6rem}
+.close-btn{background:var(--sage);border:0;color:var(--green);font-weight:700;border-radius:99px;padding:8px 16px;font-size:.85rem;cursor:pointer}
+.close-btn:hover{background:#d3dfd4}
+.modal-body p{margin-bottom:16px;line-height:1.7;color:#3d4a44}
+.modal-body h4{color:var(--green);margin:24px 0 8px;font-size:1.1rem}
+
+button{font:inherit;cursor:pointer}
+textarea{font:inherit;width:100%;border:1px solid #cbd2c9;border-radius:12px;background:#fffefa;padding:15px;color:var(--ink);min-height:140px;resize:vertical;line-height:1.6}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btn{border:0;border-radius:99px;padding:11px 18px;background:var(--green);color:white;font-size:.94rem}.btn.secondary{background:transparent;color:var(--green);border:1px solid var(--green)}
+details{border-top:1px solid var(--line);padding:16px 0;scroll-margin-top:72px}summary{cursor:pointer;font-weight:650;color:var(--green)}
+footer{border-top:1px solid var(--line);padding:28px 20px;color:var(--muted);font-size:.86rem;text-align:center}
+@media(max-width:680px){header{align-items:flex-start;flex-direction:column;gap:4px}.grid{grid-template-columns:1fr}.hero{padding-top:38px}.panel{padding:18px}.modal-content{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">WIEDER ICH</div>
+    <div class="tag">Eine Untersuchung darüber, was Bürokratie und Knappheit mit einem Menschen machen</div>
+  </div>
+</header>
+
+<nav aria-label="Hauptnavigation">
+  <div class="nav-links">
+  <a href="#start">Start</a>
+  <a href="#mechanisms">Mechanismen des Systems</a>
+  <a href="#traps">Systemfallen &amp; Double Binds</a>
+  <a href="#space">Ruhiger Raum</a>
+  <a href="#books">Lesebegleiter</a>
+  <a href="#support">Unabhängige Hilfe</a>
+  <a href="#trust">Datenschutz &amp; Forschung</a>
+  </div>
+  <a href="https://www.wetter.com" class="quick-exit" title="Sofort verlassen">Schnellausstieg</a>
+</nav>
+
+<main>
+  <div class="hero" id="start">
+    <h1>Du bist mehr als deine Fallakte.</h1>
+    <p class="lead">Langzeitarbeitslosigkeit und bürokratische Abhängigkeit sind nicht bloß administrative Hürden. Sie verändern, wie du über dich selbst denkst, wie dein Nervensystem auf den Alltag reagiert und wie viel Raum noch bleibt, um einfach ein Mensch zu sein.</p>
+    <p>WIEDER ICH ist ein ruhiges, unabhängiges digitales Refugium. Es gibt hier keine Motivationsreden, keine Leistungsbewertungen, keine To-do-Listen und keinerlei Verbindung zu einer staatlichen Behörde.</p>
+  </div>
+
+  <section id="mechanisms">
+    <div class="section-intro">
+      <div class="eyebrow">Direkte Erklärungen &amp; Evidenz</div>
+      <h2>Mechanismen des Systems</h2>
+      <p>Du weißt bereits, wie sich diese Erfahrungen anfühlen. Unten findest du einen direkten Blick auf die psychologischen, soziologischen und ökonomischen Mechanismen dahinter. Klicke auf eine beliebige Karte, um einen vertiefenden, forschungsbasierten Essay zu dieser Erfahrung zu lesen.</p>
+    </div>
+
+    <div class="grid">
+      <button class="tile" onclick="openModal('essay-1')">
+        <div>
+          <div class="tile-header"><span class="pill">Anerkennung</span></div>
+          <h3>1. Als Fallnummer behandelt werden</h3>
+          <p>Wenn eine Institution dauerhaft mit dir als Verwaltungsobjekt statt als Mensch interagiert, entsteht ein dokumentierter Zustand sozialer Entfremdung. Sich emotional zurückzuziehen ist mit der Zeit keine Apathie – es ist die Art und Weise, wie sich der Geist schützt, wenn grundlegende menschliche Anerkennung fehlt.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('essay-2')">
+        <div>
+          <div class="tile-header"><span class="pill">Soziale Normen</span></div>
+          <h3>2. „Und, was machst du beruflich?“</h3>
+          <p>Keine Standardantwort parat zu haben, löst eine unmittelbare soziale Bedrohungsreaktion aus. Das Unbehagen rührt von der unausgesprochenen kulturellen Regel her, die eine Berufsbezeichnung mit dem Recht eines Menschen gleichsetzt, Raum einzunehmen.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('essay-3')">
+        <div>
+          <div class="tile-header"><span class="pill">Nervensystem</span></div>
+          <h3>3. Post nicht öffnen können</h3>
+          <p>In der Stresspsychologie konditioniert eine unvorhersehbare Bedrohung, die sich nicht leicht kontrollieren lässt, das Nervensystem darauf zu reagieren, noch bevor man weiß, was im Umschlag steckt. Den Brief beiseitezulegen ist ein Vermeidungsreflex – das Nervensystem blockiert vorübergehend eine erwartete Überlastung, wenn die mentalen Reserven bereits erschöpft sind.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('essay-4')">
+        <div>
+          <div class="tile-header"><span class="pill">Knappheits-Mathematik</span></div>
+          <h3>4. Arbeit und Geld – eine schwierige Rechnung</h3>
+          <p>Die Verhaltensforschung zum Thema Knappheit zeigt, dass das ständige Kalkulieren engster Spielräume enorme Mengen kognitiver Bandbreite verschlingt. Wenn die Rechnung den tatsächlichen Lebensstandard kaum verändert – oder das wenige an Sicherheit zu destabilisieren droht –, ist Zögern kein Mangel an Antrieb, sondern eine rationale Antwort auf eine hochriskante Gleichung.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('essay-5')">
+        <div>
+          <div class="tile-header"><span class="pill">Selbstwirksamkeit</span></div>
+          <h3>5. Jahre voller Bewerbungen und Absagen</h3>
+          <p>Wenn anhaltende Anstrengung dauerhaft kein vorhersehbares Ergebnis bringt, führt dies in der Psychologie zur erlernten Hilflosigkeit – einem Zustand, in dem das Gehirn die Motivation herunterfährt, um Energie vor vergeblicher Mühe zu sparen. Schließlich wird äußere Ablehnung verinnerlicht und untergräbt das grundlegende Gefühl der Selbstwirksamkeit.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('essay-6')">
+        <div>
+          <div class="tile-header"><span class="pill">Stigma &amp; Isolation</span></div>
+          <h3>6. Isolation</h3>
+          <p>Langzeitarbeitslosigkeit verengt unmerklich die soziale Welt eines Menschen – sowohl weil Teilhabe Geld kostet als auch weil unsere Kultur Erwerbslosigkeit stark stigmatisiert. Soziologen beobachten, dass stigmatisierte Erfahrungen oft zur Selbstisolation führen: Menschen ziehen sich zurück, um ungebetenen Ratschlägen, subtilen Vergleichen oder ständigen Erklärungen aus dem Weg zu gehen.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('essay-7')">
+        <div>
+          <div class="tile-header"><span class="pill">Kognitive Last</span></div>
+          <h3>7. Wenn das Jobcenter dein ganzes Leben bestimmt</h3>
+          <p>Die Forschung zur kognitiven Belastung zeigt: Wenn Überleben und Regelkonformität jeden Tag den Vordergrund des Geistes einnehmen, wird die Kapazität des Gehirns für Neugier, Kreativität oder langfristiges Denken verdrängt. In ständiger administrativer Alarmbereitschaft zu leben, lässt kaum Bandbreite für irgendetwas außerhalb des Systems.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('essay-8')">
+        <div>
+          <div class="tile-header"><span class="pill">Sicherheit &amp; Ökonomie</span></div>
+          <h3>8. Die Niedriglohn-Falle (Arbeiten für Pfennige)</h3>
+          <p>Wenn schlecht bezahlte Jobs kaum oder gar keinen finanziellen Vorteil gegenüber der Grundsicherung bieten, stehen Menschen vor einem harten ökonomischen Dilemma: sich in erschöpfender Arbeit für einen verschwindend geringen Nettogewinn aufzureiben oder die eigene Zeit zu bewahren, während man finanziell genauso prekär dasteht. Dieser Konflikt ist eine rationale ökonomische Kalkulation, kein Mangel an Fleiß.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+
+      <button class="tile" style="grid-column: 1 / -1;" onclick="openModal('essay-9')">
+        <div>
+          <div class="tile-header"><span class="pill">Null-Puffer-Realität</span></div>
+          <h3>9. Die Hochseil-Realität (Null Spielraum für Fehler)</h3>
+          <p>Für Menschen mit finanziellen Rücklagen oder Sicherheitsnetzen ist ein Fehler, eine verpasste Frist oder ein gescheitertes Vorstellungsgespräch eine Unannehmlichkeit – eine vorübergehende Bodenwelle. In einem Prekaritätssystem hingegen sind die finanziellen und administrativen Strafen asymmetrisch: Ein einziger Fehltritt kann sofort eine existenzielle Krise auslösen. Die Knappheitsforschung zeigt, dass ein Leben ohne Sicherheitsnetz zu chronischer Hypervigilanz zwingt, weil jede Routineentscheidung maximale Risiken birgt.</p>
+        </div>
+        <span class="explore-hint">Forschungs-Essay lesen &rarr;</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Modals for Essays & Traps -->
+  <div id="modal-overlay" class="modal-overlay" onclick="handleOutsideClick(event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Titel</h2>
+        <button class="close-btn" onclick="closeModal()">Schließen &times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Dynamischer Inhalt -->
+      </div>
+    </div>
+  </div>
+
+  <section id="traps">
+    <div class="section-intro">
+      <div class="eyebrow">Das System entschlüsseln</div>
+      <h2>Systemfallen &amp; Double Binds</h2>
+      <p>Wenn du jemals das Gefühl hattest, dass sich die Regeln absichtlich widersprechen oder du zum Scheitern verurteilt bist, egal was du tust, bildest du dir das nicht ein. Hier ist ein Blick auf die strukturellen Fallen im System – und wie man sie navigiert. Klicke auf eine Falle, um die psychologische Analyse und konkrete Handlungsstrategie zu lesen.</p>
+    </div>
+
+    <div class="grid">
+      <button class="tile" onclick="openModal('trap-1')">
+        <div>
+          <div class="tile-header"><span class="pill">EKS-Falle</span></div>
+          <h3>1. Die EKS-Falle (Einkommensschätzungen)</h3>
+          <p>Du musst freiberufliche Einnahmen 6 Monate im Voraus schätzen. Zu hoch geschätzt reicht das Geld nicht für die Miete; zu niedrig geschätzt folgen sofortige Rückforderungen und Schulden.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('trap-2')">
+        <div>
+          <div class="tile-header"><span class="pill">VM-Falle</span></div>
+          <h3>2. Die Vermittlungsbudget-Falle (VM)</h3>
+          <p>Du musst dich aktiv bewerben, aber alle Reise- oder Bewerbungskosten müssen vor der Ausgabe genehmigt werden – ein Teufelskreis bei spontanen Vorstellungsgesprächen.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('trap-3')">
+        <div>
+          <div class="tile-header"><span class="pill">Double Bind</span></div>
+          <h3>3. Die Gesundheits- vs. Verfügbarkeits-Falle</h3>
+          <p>Volle Arbeitsfähigkeit anzugeben drängt dich in unpassende Jobs; gesundheitliche Grenzen zu nennen löst langwierige Gutachten und bürokratische Schwebezustände aus.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('trap-4')">
+        <div>
+          <div class="tile-header"><span class="pill">Double Bind</span></div>
+          <h3>4. Die Kooperations- vs. Autonomie-Falle</h3>
+          <p>Verlangt absolute Fügsamkeit bei jeder Vorgabe. Willkürliche Maßnahmen zu befolgen raubt kognitive Energie, während Widerstand sofortige Sanktionen nach sich zieht.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('trap-5')">
+        <div>
+          <div class="tile-header"><span class="pill">OAW-Falle</span></div>
+          <h3>5. Die Ortsabwesenheits-Falle (OAW)</h3>
+          <p>Für Reisen oder Familienbesuche ist eine vorherige Genehmigung erforderlich. Ohne Erlaubnis wegzufahren riskiert den sofortigen Leistungsentzug und Rückforderungen.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('trap-6')">
+        <div>
+          <div class="tile-header"><span class="pill">Sanktionsspirale</span></div>
+          <h3>6. Die Sanktionsspirale &amp; Widerspruchs-Falle</h3>
+          <p>Ein Widerspruch setzt Leistungskürzungen nicht automatisch aus – was Menschen aus akuter finanzieller Not heraus zur Kapitulation zwingt.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('trap-7')">
+        <div>
+          <div class="tile-header"><span class="pill">Haushalt</span></div>
+          <h3>7. Die Bedarfsgemeinschafts-Falle</h3>
+          <p>Das Zusammenleben in einer WG oder Partnerschaft führt schnell zur Unterstellung einer Bedarfsgemeinschaft und erzwingt die Offenlegung fremder Finanzen.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+
+      <button class="tile" onclick="openModal('trap-8')">
+        <div>
+          <div class="tile-header"><span class="pill">Vermögensprüfung</span></div>
+          <h3>8. Die Schonvermögens- &amp; Offenlegungs-Falle</h3>
+          <p>Nachzuweisen, dass bescheidene Ersparnisse unter den Freibeträgen liegen, erfordert lückenlose historische Kontoauszüge unter Generalverdacht.</p>
+        </div>
+        <span class="explore-hint">Dekodierungsstrategie lesen &rarr;</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="space">
+    <div class="section-intro">
+      <div class="eyebrow">Vollkommen freiwillig</div>
+      <h2>Ein ruhiger Raum für deine Notizen</h2>
+      <p>Manchmal hilft es, Dinge einfach aufzuschreiben, um sie von der Seele zu bekommen.</p>
+    </div>
+
+    <div class="panel">
+      <textarea id="thought" placeholder="Schreib auf, was dir auf dem Herzen liegt, oder lass dieses Feld einfach komplett leer..."></textarea>
+      <div class="actions">
+        <button class="btn" id="saveTxt">Gedanken als .txt-Datei auf meinem Gerät speichern</button>
+        <button class="btn secondary" id="clearAll">Alles löschen</button>
+      </div>
+      <p class="small" style="margin-top:12px">Ein Klick auf „Speichern“ erzeugt eine Textdatei direkt auf deinem Gerät, damit du deine Notizen für deinen nächsten Besuch behalten kannst. Du kannst alles jederzeit dauerhaft löschen.</p>
+    </div>
+
+    <div class="panel green" style="margin-top:24px;">
+      <h3 style="margin-top:0;color:var(--green)">Absolute Datenschutz-Garantie</h3>
+      <p style="margin-bottom:0">Keine Behörde sieht das hier. Nichts, was du auf dieser Seite tippst, verlässt jemals dein Browserfenster. Es gibt keine Datenbank, kein Tracking und keine Serververbindung. Wenn du dich mit einem Blatt Papier und einem Stift sicherer fühlst – oder deine Gedanken lieber ganz für dich behältst, ohne ein Wort zu schreiben –, ist das genauso willkommen.</p>
+    </div>
+  </section>
+
+  <section id="books">
+    <div class="section-intro">
+      <div class="eyebrow">Optionale Begleiter</div>
+      <h2>Bücher, die bestärken, ohne zu belehren</h2>
+      <p>Keine Hausaufgaben und keine Selbsthilfe-Checklisten – sondern nachdenkliche Bücher, die Knappheit, Bürokratie, Erschöpfung und menschliche Würde aufrichtig beleuchten.</p>
+    </div>
+    <div class="grid">
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3><em>Die Arbeitslosen von Marienthal</em> (1933)</h3>
+          <p>Marie Jahoda, Paul Lazarsfeld &amp; Hans Zeisel – Die grundlegende, zutiefst menschliche Studie, die zeigt, wie Langzeitarbeitslosigkeit das Zeitempfinden und die Energie als universelle menschliche Reaktion schrumpfen lässt – nicht als persönlicher Makel.</p>
+        </div>
+      </div>
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3><em>Knappheit: Was es mit uns macht, wenn wir zu wenig haben</em></h3>
+          <p>Sendhil Mullainathan &amp; Eldar Shafir – Erklärt eindrücklich, wie finanzielle und administrative Knappheit kognitive Bandbreite aufzehrt und kaum mentalen Raum für langfristige Planung lässt.</p>
+        </div>
+      </div>
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3><em>Bürokratie: Die Utopie der Regeln</em></h3>
+          <p>David Graeber – Untersucht die stille Erschöpfung und Absurdität eines Lebens innerhalb starrer, unpersönlicher bürokratischer Strukturen.</p>
+        </div>
+      </div>
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3><em>Wenn alles zusammenbricht</em></h3>
+          <p>Pema Chödrön – Ein geerdeter, unaufdringlicher Begleiter für Momente, in denen sich das Leben völlig ungewiss und bodenlos anfühlt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="section-intro">
+      <div class="eyebrow">Unabhängige Unterstützungsnetzwerke</div>
+      <h2>Wo du empathische, nicht-strafende Hilfe findest</h2>
+      <p>Du musst dich nicht allein durch das System kämpfen. Unten findest du vertrauenswürdige, unabhängige Organisationen, Beratungsnetzwerke und Rechtshilfe-Initiativen, die außerhalb der staatlichen Jobcenter agieren und deine Rechte und Würde in den Mittelpunkt stellen.</p>
+    </div>
+
+    <div class="grid">
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3>Tacheles e.V.</h3>
+          <p>Eine der bekanntesten unabhängigen Interessenvertretungen für Sozialrecht in Deutschland. Bietet umfangreiche Online-Datenbanken, Rechtsprechungsübersichten und Leitfäden für SGB-II-/Bürgergeld-Beziehende.</p>
+        </div>
+      </div>
+
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3>Lokale Erwerbsloseninitiativen</h3>
+          <p>Solidarische Selbsthilfegruppen in vielen deutschen Städten, die kostenfreie Beratung und Begleitung zu Jobcenter-Terminen (<em>Beistand nach § 13 SGB X</em>) anbieten.</p>
+        </div>
+      </div>
+
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3>Schuldner- und Insolvenzberatung</h3>
+          <p>Kostenfreie, vertrauliche Schuldnerberatung gemeinnütziger Träger (wie Caritas, Diakonie, AWO), die hilft, finanziellen Druck ohne Vorurteile zu bewältigen.</p>
+        </div>
+      </div>
+
+      <div class="tile" style="cursor:default">
+        <div>
+          <h3>Sozialberatung &amp; Wohlfahrtsverbände</h3>
+          <p>Unabhängige Beratungsstellen karitativer Verbände, die vertrauliche sozialrechtliche Unterstützung bei Fragen zu Wohnen, Leistungen und Bescheiden bieten.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="trust">
+    <div class="section-intro">
+      <div class="eyebrow">Transparenz &amp; Fundierung</div>
+      <h2>Forschung &amp; evidenzbasierter Kontext</h2>
+    </div>
+
+    <div class="panel clay">
+      <h3>Technischer Datenschutz-Nachweis</h3>
+      <p>Diese Seite ist ein statisches, clientseitiges HTML-Dokument ohne Backend-Server, ohne Datenbank, ohne Cookies und ohne Tracking-Skripte. Du kannst dies selbst in jedem Browser überprüfen, indem du die Entwicklertools öffnest (<code>F12</code> &rarr; Tab „Netzwerk“) und beobachtest, dass beim Lesen oder Tippen null Datenpakete dein Gerät verlassen.</p>
+    </div>
+
+    <details open>
+      <summary>Wissenschaftliche &amp; empirische Referenzen (Erweiterte Übersicht)</summary>
+      <div style="padding-top:14px;color:#43514b;font-size:.94rem">
+        <p><strong>Administrative Burden (Verwaltungslasten &amp; Nichtinanspruchnahme):</strong> Pamela Herd &amp; Donald P. Moynihan, <em>Administrative Burden: Policymaking by Other Means</em> (2018) – systematisiert Lernkosten (<em>Learning Costs</em>), Befolgungskosten (<em>Compliance Costs</em>) und psychologische Kosten (<em>Psychological Costs</em>: Stigma, Autonomieverlust, chronischer Stress) an der Schnittstelle zwischen Bürger:innen und Sozialstaat.</p>
+        <p><strong>Bürokratie, Street-Level Bureaucracy &amp; Entfremdung:</strong> Max Weber, <em>Wirtschaft und Gesellschaft</em> (1922) zur bürokratischen Rationalisierung und Entpersönlichung; Michael Lipsky, <em>Street-Level Bureaucracy</em> (1980) zu Ermessensspielräumen, Standardisierung und struktureller Reibung im Behördenalltag; David Graeber, <em>The Utopia of Rules</em> (2015) zur asymmetrischen Deutungs- und Definitionsmacht starrer Regelwerke.</p>
+        <p><strong>Erwerbsnormen, latente Funktionen &amp; soziales Stigma:</strong> Marie Jahoda, Paul Lazarsfeld &amp; Hans Zeisel, <em>Die Arbeitslosen von Marienthal</em> (1933) sowie Jahodas Modell der fünf latenten Funktionen von Erwerbsarbeit (Zeitstruktur, Sozialkontakte, kollektive Ziele, Status/Identität, regelmäßige Aktivität); Erving Goffman, <em>Stigma</em> (1963) über soziale Identitätsbedrohung, Informationskontrolle und Rückzug; Robert Walker et al., <em>The Shame of Poverty</em> (2013) zur globalen Verknüpfung von Armut und sozialer Beschämung.</p>
+        <p><strong>Knappheit, kognitive Bandbreite &amp; Risikoasymmetrie:</strong> Sendhil Mullainathan &amp; Eldar Shafir, <em>Scarcity: Why Having Too Little Means So Much</em> (2013) sowie Mani et al., <em>Science</em> (2013) zur messbaren Taxierung kognitiver Bandbreite durch akute finanzielle Knappheit; Daniel Kahneman &amp; Amos Tversky (1979) zur Verlustaversion unter asymmetrischen Existenzrisiken.</p>
+        <p><strong>Deutsche Arbeitsmarkt-, Sanktions- &amp; Gesundheitsforschung (SGB II / Bürgergeld):</strong> Empirische Befunde des Instituts für Arbeitsmarkt- und Berufsforschung (IAB) zu Sanktionsfolgen, materieller Unterdeckung, psychosozialer Belastung und verdeckter Armut (Nichtinanspruchnahme von Leistungen); Kroll &amp; Lampert (Robert Koch-Institut) zum Zusammenhang von Langzeitarbeitslosigkeit, chronischem Stress und gesundheitlicher Ungleichheit; Paul &amp; Moser (2009), Metaanalyse zu Arbeitslosigkeit und psychischer Gesundheit (<em>Journal of Vocational Behavior</em>).</p>
+        <p><strong>Chronischer Stress, Nervensystem &amp; Vermeidungsreflexe:</strong> Bruce S. McEwen (1998) zum Konzept der <em>allostatischen Last</em> (chronische Überbeanspruchung physiologischer Stresssysteme bei dauerhafter Bedrohung); Stress- und Traumapsychologie zu Hypervigilanz, Erstarrungs- und Vermeidungsbewältigung (<em>Avoidance Coping</em>) bei erschöpften Bewältigungsressourcen.</p>
+        <p><strong>Erlernte Hilflosigkeit &amp; Selbstwirksamkeit:</strong> Martin E. P. Seligman, <em>Helplessness</em> (1975) sowie Steven F. Maier &amp; Martin E. P. Seligman (2016) zur neurobiologischen Anpassung an unkontrollierbare Stressoren; Albert Bandura, <em>Self-Efficacy: The Exercise of Control</em> (1997) über die Erosion von Selbstwirksamkeit unter nicht-kontingenten Bedingungen.</p>
+        <p><strong>Datenschutz &amp; Überwachungsabwehr (Privacy by Design):</strong> Ann Cavoukian, <em>Privacy by Design</em> (2009) zur strikten Datenminimierung und lokalen Verarbeitung; europäische Grundsätze der Datensparsamkeit (Art. 5 Abs. 1 lit. c DSGVO) zum Schutz vulnerabler Zielgruppen vor sekundärer Stigmatisierung und Datenabfluss.</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="rechtliches">
+    <div class="section-intro">
+      <div class="eyebrow">Rechtliches</div>
+    </div>
+    <details id="impressum">
+      <summary>Impressum</summary>
+      <div class="panel">
+      <p><strong>Angaben gemäß § 5 DDG</strong><br>
+      Adam Lenox<br>
+      Fidicinstr. 26<br>
+      10965 Berlin</p>
+      <p><strong>Kontakt</strong><br>
+      Telefon: +49 (0)176 31106961<br>
+      E-Mail: <a href="mailto:lenox@brooklynbridge.de" style="color:var(--green)">lenox@brooklynbridge.de</a></p>
+      <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</strong><br>
+      Adam Lenox, Anschrift wie oben</p>
+      <p><strong>Hinweis</strong><br>
+      WIEDER ICH ist ein unabhängiges, nicht-kommerzielles Informations- und Reflexionsangebot. Es ersetzt keine Rechtsberatung, keine ärztliche oder psychotherapeutische Behandlung und steht in keiner Verbindung zu einer Behörde. Für die Inhalte verlinkter externer Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+    </div>
+    </details>
+    <details id="datenschutz">
+      <summary>Datenschutzerklärung</summary>
+      <div class="panel">
+      <p><strong>1. Verantwortlicher</strong><br>
+      Adam Lenox, Fidicinstr. 26, 10965 Berlin, E-Mail: <a href="mailto:lenox@brooklynbridge.de" style="color:var(--green)">lenox@brooklynbridge.de</a></p>
+
+      <p><strong>2. Grundsatz</strong><br>
+      WIEDER ICH selbst erhebt, speichert und verarbeitet keine personenbezogenen Daten. Die Seite verwendet keine Cookies, keine Analyse- oder Tracking-Werkzeuge, keine eingebundenen Schriftarten oder Inhalte von Drittanbietern, keine Kontaktformulare und keine Benutzerkonten.</p>
+
+      <p><strong>3. Hosting</strong><br>
+      Die Seite wird bei Netlify, Inc. (USA) gehostet. Beim Aufruf der Seite verarbeitet der Hosting-Anbieter technisch notwendige Verbindungsdaten in Server-Protokollen (Zugriffslogs), insbesondere die IP-Adresse, Datum und Uhrzeit des Abrufs sowie die aufgerufene Seite. Diese Verarbeitung ist erforderlich, um die Seite sicher und stabil auszuliefern (Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO). Auf diese Protokolle hat das Projekt keinen Zugriff und wertet sie nicht aus. Dabei kann eine Übermittlung von Daten in die USA stattfinden. Weitere Informationen: <a href="https://www.netlify.com/privacy/" style="color:var(--green)">Datenschutzerklärung von Netlify</a>.</p>
+
+      <p><strong>4. Ruhiger Raum (lokale Notizen)</strong><br>
+      Texte, die du im Bereich „Ruhiger Raum“ eingibst, werden ausschließlich im Arbeitsspeicher deines Browsers verarbeitet. Sie werden nicht an einen Server übertragen und nicht dauerhaft gespeichert. Der optionale Export erzeugt eine Textdatei direkt auf deinem Gerät.</p>
+
+      <p><strong>5. Externe Links</strong><br>
+      Diese Seite enthält Links zu externen Angeboten (z. B. Beratungsstellen und der Schnellausstieg). Erst wenn du einen Link anklickst, verlässt du WIEDER ICH; ab dann gelten die Datenschutzbestimmungen des jeweiligen Anbieters.</p>
+
+      <p><strong>6. E-Mail-Kontakt</strong><br>
+      Wenn du per E-Mail Kontakt aufnimmst, werden deine Angaben nur zur Beantwortung deiner Anfrage verwendet und anschließend gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen (Art. 6 Abs. 1 lit. b bzw. f DSGVO).</p>
+
+      <p><strong>7. Deine Rechte</strong><br>
+      Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15–21 DSGVO). Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren, in Berlin bei der Berliner Beauftragten für Datenschutz und Informationsfreiheit.</p>
+
+      <p>Stand: November 2026</p>
+    </div>
+    </details>
+  </section>
+</main>
+
+<footer>
+  WIEDER ICH · Eine Untersuchung darüber, was Bürokratie und Knappheit mit einem Menschen machen.<br>
+  Aktive Web-Instanz: <a href="https://wiederichde.netlify.app/" style="color:var(--green)">wiederichde.netlify.app</a> · Unabhängiges Open-Source-Civic-Tech-Projekt – keine Behördenverbindung, kein Tracking, keine Therapie und keine Rechtsberatung.<br>
+  <a href="#impressum" style="color:var(--green)">Impressum</a> · <a href="#datenschutz" style="color:var(--green)">Datenschutzerklärung</a>
+</footer>
+
+<script>
+const essays = {
+  'trap-1': {
+    title: '1. Die EKS-Falle (Einkommensschätzungen für Selbstständige)',
+    body: `
+      <p>Wenn du versuchst, ein kleines ergänzendes Einkommen als Selbstständige:r zu erzielen, wirst du gezwungen, deine Einnahmen 6 Monate im Voraus zu schätzen. Schätzt du zu hoch, reicht das Geld nicht für die Miete; schätzt du zu niedrig, folgen sofortige Rückforderungen und Schulden. Das System begegnet prekären Kleinstunternehmer:innen mit starrem bürokratischem Misstrauen.</p>
+      
+      <h4>Der Realitätscheck</h4>
+      <p>Du bist weder schlecht in Mathe noch finanziell unverantwortlich. Die verpflichtende 6-Monats-Schätzung ist für stabile, feste Angestelltenverhältnisse mit planbaren Stunden gebaut – nicht für schwankende Freelancer-Aufträge, Solo-Selbstständigkeit oder unregelmäßige Einkünfte.</p>
+      
+      <h4>Die psychologische Belastung</h4>
+      <p>Sie erzeugt chronische finanzielle Angst und lässt jeden neuen Kundenkontakt wie ein hochriskantes Glücksspiel mit der Behörde wirken statt wie eine Chance zur Stabilisierung.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>Konservative Basiswerte einreichen:</strong> Berechne und melde dein geschätztes Einkommen in volatilen Monaten immer auf Grundlage deiner niedrigsten realistischen Untergrenze.<br>
+      &bull; <strong>Schwankungen sofort melden:</strong> Wenn deine tatsächlichen Einnahmen unerwartet einbrechen oder schwanken, dokumentiere jede Ausgabe und Einkommensänderung sofort schriftlich, statt auf die 6-monatige Schlussabrechnung zu warten, um plötzliche Rückforderungsschocks zu vermeiden.</p>
+    `
+  },
+  'trap-2': {
+    title: '2. Die Vermittlungsbudget-Falle (VM)',
+    body: `
+      <p>Regel #1: Du musst dich aktiv bewerben. Regel #2: Erstattungen für Bewerbungs- oder Reisekosten müssen genehmigt werden, <em>bevor</em> du das Geld ausgibst. Wenn du schnell handelst, um ein Vorstellungsgespräch wahrzunehmen, und die Belege später einreichst, wird die Erstattung routinemäßig mangels „vorheriger Antragstellung“ abgelehnt.</p>
+
+      <h4>Der Realitätscheck</h4>
+      <p>Dies fängt dich in einem finanziellen Double Bind, in dem berufliche Eigeninitiative als Regelverstoß bestraft wird, weil behördliche Bearbeitungszeiten nicht mit der Geschwindigkeit des echten Arbeitsmarktes mithalten können.</p>
+
+      <h4>Die psychologische Belastung</h4>
+      <p>Gibt dir das Gefühl, dafür bestraft zu werden, dass du Initiative zeigst und schnell auf Einladungen reagierst.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>Pauschalen Vorab-Antrag stellen (Antrag auf Vorab-Bewilligung):</strong> Stelle zu Beginn jedes Quartals einen allgemeinen, pauschalen Antrag auf Übernahme von Bewerbungs- und Reisekosten, noch bevor konkrete Gespräche anstehen.<br>
+      &bull; <strong>Jeden Beleg &amp; digitalen Nachweis sichern:</strong> Wenn ein kurzfristiges Vorstellungsgespräch sofortige Reisekosten erfordert, dokumentiere die Dringlichkeit vor dem Ticketkauf per E-Mail an deine Sachbearbeitung, um eine lückenlose Aktennotiz der Notwendigkeit zu schaffen.</p>
+    `
+  },
+  'trap-3': {
+    title: '3. Die Gesundheits- vs. Verfügbarkeits-Falle (Double Bind)',
+    body: `
+      <p>Wenn du meldest, dass gesundheitliche Probleme, Stress oder Erschöpfung deine Belastbarkeit einschränken, drohen langwierige medizinische Begutachtungen und anhaltender Druck. Erklärst du dich ohne Einschränkung zu 100 % arbeitsfähig, wirst du in schlecht bezahlte, hochbelastende Jobs gedrängt, die deine Genesung zerstören und den Burnout vertiefen.</p>
+
+      <h4>Der Realitätscheck</h4>
+      <p>Diese Mechanik zwingt dich in die Selbstzensur, bei der du deinen tatsächlichen körperlichen und seelischen Zustand verbergen musst, um administrative Nachteile zu vermeiden.</p>
+
+      <h4>Die psychologische Belastung</h4>
+      <p>Chronische Angst davor, gegenüber Behörden die Wahrheit über die eigene Gesundheit auszusprechen.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>Medizinische Realität von bürokratischer Compliance trennen:</strong> Lass deine behandelnden Ärztinnen und Ärzte konkrete, objektive Funktionseinschränkungen attestieren (z. B. durch Arbeitsunfähigkeitsbescheinigungen oder fachärztliche Stellungnahmen), statt deine Gesundheit mündlich mit Sachbearbeitenden zu verhandeln, die kein medizinisches Fachpersonal sind.<br>
+      &bull; <strong>Auf schriftliche Kommunikation setzen:</strong> Kommuniziere Fragen zu Belastbarkeit oder gesundheitlichen Einschränkungen ausschließlich schriftlich, damit Erwartungen nachvollziehbar dokumentiert sind und du vor mündlichen Missverständnissen geschützt bist.</p>
+    `
+  },
+  'trap-4': {
+    title: '4. Die Kooperations- vs. Autonomie-Falle (Double Bind)',
+    body: `
+      <p>Das System verlangt absolute Kooperation und Fügsamkeit bei jeder Vorgabe, jedem Fragebogen und jeder Maßnahme. Willkürliche oder entwürdigende Maßnahmen zu befolgen untergräbt jedoch dein Selbstwertgefühl, zehrt deine begrenzte kognitive Bandbreite auf und verhindert nachhaltige Stabilität.</p>
+
+      <h4>Der Realitätscheck</h4>
+      <p>Am System teilzunehmen fühlt sich oft wie ein Verrat an der eigenen Würde an, während Widerstand sofortige Sanktionen auslöst.</p>
+
+      <h4>Die psychologische Belastung</h4>
+      <p>Ein tiefes Gefühl der Ohnmacht und moralischen Verletzung.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>„Strategische Compliance“ praktizieren:</strong> Erfülle formale Verfahrenspflichten akribisch auf dem Papier, um Leistungskürzungen zu verhindern, während du deine innere Identität und deinen Selbstwert emotional von der Bewertung der Behörde abkoppelst.<br>
+      &bull; <strong>Einen äußeren Schutzschild aufbauen:</strong> Nutze private Refugien wie WIEDER ICH und unabhängige Beratungsnetzwerke, um deine Erfahrungen zu entstigmatisieren und dir bewusst zu machen, dass bürokratische Reibung ein Strukturfehler der Institution ist – kein Spiegel deines persönlichen Wertes.</p>
+    `
+  },
+  'trap-5': {
+    title: '5. Die Ortsabwesenheits-Falle (OAW – Reisen &amp; Erreichbarkeit)',
+    body: `
+      <p>Um eine kurze mentale Pause einzulegen, Familie in einer anderen Stadt zu besuchen oder ein auswärtiges Vorstellungsgespräch wahrzunehmen, bist du gesetzlich verpflichtet, vorab eine Genehmigung (Ortsabwesenheit) beim Jobcenter einzuholen. Verreist du ohne Erlaubnis – selbst nur für ein Wochenende – und es wird bekannt, können deine Leistungen sofort gestrichen werden.</p>
+
+      <h4>Der Realitätscheck</h4>
+      <p>Dies erzeugt ein tiefes Gefühl der Eingesperrtheit und panoptischen Überwachung, wodurch das eigene Zuhause zu einer Kontrollstation wird.</p>
+
+      <h4>Die psychologische Belastung</h4>
+      <p>Angst vor Bewegungsfreiheit und Einschränkung der persönlichen Lebensgestaltung.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>OAW-Anträge rechtzeitig stellen:</strong> Reiche Anträge auf Ortsabwesenheit immer frühzeitig ein (im Rahmen des gesetzlichen Anspruchs von bis zu 21 Kalendertagen pro Jahr) und begründe sie sachlich.<br>
+      &bull; <strong>Schriftlichen Nachweis sichern:</strong> Verlasse dich niemals auf mündliche Zusagen; bestehe immer auf einer schriftlichen Bestätigung der Genehmigung, um rechtlich gegen spätere Streitigkeiten abgesichert zu sein.</p>
+    `
+  },
+  'trap-6': {
+    title: '6. Die Sanktionsspirale &amp; Widerspruchs-Falle',
+    body: `
+      <p>Wenn eine verpasste Frist oder ein Missverständnis eine Anhörung oder Leistungsminderung auslöst, verweist die Rechtsbehelfsbelehrung auf das Recht zum Widerspruch. Ein Widerspruch hat jedoch in vielen Fällen keine automatische aufschiebende Wirkung – was bedeutet, dass dein Geld für Miete oder Lebensmittel sofort gekürzt wird, während du monatelang auf eine Entscheidung wartest.</p>
+
+      <h4>Der Realitätscheck</h4>
+      <p>Dies löst akute Panik und Hilflosigkeit aus und zwingt Menschen dazu, unzumutbaren Forderungen zuzustimmen, nur um zu überleben.</p>
+
+      <h4>Die psychologische Belastung</h4>
+      <p>Akute finanzielle Existenzangst und struktureller Zwang.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>Einstweiligen Rechtsschutz beantragen (Eilrechtsschutz):</strong> Nutze bei unrechtmäßigen Kürzungen des Existenzminimums Eilanträge beim zuständigen Sozialgericht, um die aufschiebende Wirkung wiederherzustellen.<br>
+      &bull; <strong>Unabhängige Unterstützung einschalten:</strong> Wende dich sofort an Erwerbsloseninitiativen, Sozialberatungsstellen oder Fachanwält:innen für Sozialrecht, statt Bescheide allein anzufechten.</p>
+    `
+  },
+  'trap-7': {
+    title: '7. Die Bedarfsgemeinschafts-Falle (Erzwungene Haushaltsannahme)',
+    body: `
+      <p>Wenn du dir eine Wohnung mit einer Mitbewohnerin, einem Freund oder einer neuen Partnerschaft teilst, vermutet das System schnell eine „Bedarfsgemeinschaft“ – was bedeutet, dass das Einkommen und Vermögen der anderen Person zur Deckung deines Bedarfs herangezogen wird und invasive Offenlegungen fremder Finanzdaten verlangt werden.</p>
+
+      <h4>Der Realitätscheck</h4>
+      <p>Dies kriminalisiert natürliche menschliche Solidarität und gegenseitige Hilfe und erschwert das Zusammenleben zum Sparen von Mietkosten.</p>
+
+      <h4>Die psychologische Belastung</h4>
+      <p>Eingriff in private Beziehungen und soziale Unterstützungsnetzwerke.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>Klare vertragliche Grenzen ziehen:</strong> Führe von Beginn an getrennte Untermietverträge, eigene Konten und getrenntes Wirtschaften (z. B. bei Lebensmitteln und Haushaltskasse).<br>
+      &bull; <strong>Auf das „Probejahr“ berufen (§ 7 Abs. 3a SGB II):</strong> Nach den gesetzlichen Regelungen wird eine Verantwortungs- und Einstehensgemeinschaft in der Regel erst nach einem Jahr des Zusammenlebens vermutet; verweise schriftlich auf diese Rechtslage, falls voreilig eine Bedarfsgemeinschaft unterstellt wird.</p>
+    `
+  },
+  'trap-8': {
+    title: '8. Die Schonvermögens- &amp; Offenlegungs-Falle',
+    body: `
+      <p>Obwohl es gesetzliche Freibeträge für geschütztes Vermögen (Schonvermögen) gibt, erfordert der Nachweis, dass deine bescheidenen Ersparnisse oder ein älteres Fahrzeug unter den Grenzen liegen, die Vorlage lückenloser historischer Kontoauszüge (oft der letzten 3 bis 6 Monate), wobei jede kleine Buchung misstrauisch hinterfragt wird.</p>
+
+      <h4>Der Realitätscheck</h4>
+      <p>Es zwingt dich dazu, jeden verbliebenen Rest persönlicher Unabhängigkeit und privater Finanzgeschichte offenzulegen.</p>
+
+      <h4>Die psychologische Belastung</h4>
+      <p>Beschämung und der Verlust grundlegender finanzieller Privatsphäre.</p>
+
+      <h4>Wie man sie dekodiert (Handlungsstrategie)</h4>
+      <p>&bull; <strong>Saubere Nachweise vorbereiten:</strong> Ordne und erläutere regelmäßige Überweisungen oder einmalige Zuwendungen auf Kontoauszügen vorab sachlich, um Rückfragen und Verzögerungen zu minimieren.<br>
+      &bull; <strong>Datenschutzrechte kennen:</strong> Informiere dich darüber, welche nicht leistungsrelevanten Ausgabendetails (z. B. Empfängernamen bei Kleinbeträgen oder sensible Daten zu Parteien, Gewerkschaften oder Gesundheit) nach Datenschutzvorgaben geschwärzt werden dürfen.</p>
+    `
+  },
+  'essay-1': {
+    title: '1. Als Fallnummer behandelt werden: Die Mechanik institutioneller Entfremdung',
+    body: `
+      <p>Wenn eine Institution dauerhaft mit dir als Verwaltungsobjekt statt als Mensch interagiert, entsteht ein dokumentierter Zustand sozialer Entfremdung. Sich emotional zurückzuziehen ist mit der Zeit keine Apathie – es ist die Art und Weise, wie sich der Geist schützt, wenn grundlegende menschliche Anerkennung fehlt.</p>
+      
+      <h4>Was die Forschung zeigt</h4>
+      <p>In der Soziologie und Organisationspsychologie (aufbauend auf Max Webers grundlegenden Theorien zur Bürokratisierung (1922), Michael Lipskys Forschung zu <em>Street-Level Bureaucracy</em> (1980) und modernen Institutionskritiken wie denen von David Graeber (2015)) sind große Verwaltungsapparate auf Skalierbarkeit, Einheitlichkeit und Kontrolle ausgelegt. Um Tausende von Fällen effizient zu bearbeiten, müssen menschliche Variablen – wie persönliche Geschichte, emotionaler Zustand, Würde und individuelle Lebensumstände – herausgefiltert werden, sodass nur eine kalte numerische Akte übrig bleibt.</p>
+      <p>Wenn Menschen fortlaufend entpersonalisierten Interaktionen ausgesetzt sind, in denen sie rein als Datenpunkte oder Compliance-Risiken behandelt werden, löst dies relationalen Stress aus. Das menschliche Gehirn ist biologisch auf wechselseitige Anerkennung angelegt – wir stabilisieren unser Selbstbild dadurch, wie andere uns ansehen und auf uns reagieren.</p>
+
+      <h4>Warum emotionaler Rückzug Schutz ist, kein Versagen</h4>
+      <p>Wenn eine Behörde deine Existenz wiederholt entwertet, überwacht oder auf Zahlen und Fristen reduziert, ist es psychisch nicht durchzuhalten, diesem Umfeld gegenüber emotional offen zu bleiben. Dichtzumachen, sich taub zu fühlen oder innerlich auf Abstand zu gehen, ist kein persönliches moralisches Versagen und keine Faulheit; es ist ein hochentwickelter Selbstschutzmechanismus. Deine Psyche errichtet eine Schutzmauer, um deine Kernidentität vor der ständigen Reibung eines gefühllosen Systems zu bewahren.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Deine innere Taubheit ist der Beweis für einen sensiblen Geist, der sich vor einer übergriffigen Umgebung schützt. Die Tatsache, dass du Entfremdung spürst, zeigt, dass deine Menschlichkeit intakt ist – du erkennst, dass du es verdienst, als Mensch behandelt zu werden, weil sich die Reduzierung auf eine Akte falsch anfühlt.</p>
+    `
+  },
+  'essay-2': {
+    title: '2. „Und, was machst du beruflich?“: Das kulturelle Gewicht des Berufsstatus',
+    body: `
+      <p>Keine Standardantwort parat zu haben, löst eine unmittelbare soziale Bedrohungsreaktion aus. Das Unbehagen rührt von der unausgesprochenen kulturellen Regel her, die eine Berufsbezeichnung mit dem Recht eines Menschen gleichsetzt, Raum einzunehmen.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>Der Soziologe Erving Goffman zeigte in seinem wegweisenden Werk <em>Stigma</em> (1963) – ergänzt durch Marie Jahodas Analyse der latenten Statusfunktion von Arbeit sowie Robert Walkers internationaler Forschung zu <em>The Shame of Poverty</em> (2013) – und seinen Studien zur Selbstdarstellung im Alltag, wie tief moderne Identität an soziale Skripte gebunden ist. In industrialisierten Marktgesellschaften fungiert Erwerbsarbeit als primäre Eintrittskarte für höfliche Konversation. Wenn jemand nach deinem Beruf fragt, fragt er selten nur nach deinen täglichen Aufgaben – er prüft im Schnelldurchlauf deine soziale Verlässlichkeit, deine Klassenzugehörigkeit und deinen moralischen Beitrag.</p>
+      <p>Wenn ein Mensch diese erwartete kulturelle Abkürzung nicht liefern kann, entsteht sofortige Reibung. Das Nervensystem interpretiert diese soziale Abweichung als Bedrohung und schüttet Stresshormone aus, weil kulturelle Konditionierung uns lehrt, dass Nicht-Produktion sozialem Ausschluss gleichkommt.</p>
+
+      <h4>Warum das Unbehagen der Kultur gehört, nicht dir</h4>
+      <p>Die Anspannung bei lockerem Smalltalk bedeutet nicht, dass du sozial unfähig bist; sie bedeutet, dass du sensibel auf eine willkürliche kulturelle Erzählung reagierst, die wirtschaftlichen Output mit menschlichem Wert verwechselt. Über Jahrhunderte hinweg wurde menschlicher Wert an Gemeinschaftszugehörigkeit, Fürsorge, Kreativität und Ausdauer gemessen – nicht an Jobtiteln.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Das Unbehagen, das du bei dieser Frage spürst, ist eine rationale Reaktion auf eine irrationale gesellschaftliche Fixierung. Dein Wert lässt sich nicht in eine Stellenbeschreibung pressen, und deinen Frieden zu schützen, statt eine Ausrede zu erfinden, ist ein Akt stiller Würde.</p>
+    `
+  },
+  'essay-3': {
+    title: '3. Post nicht öffnen können: Die Neurobiologie der Vermeidung',
+    body: `
+      <p>In der Stresspsychologie konditioniert eine unvorhersehbare Bedrohung, die sich nicht leicht kontrollieren lässt, das Nervensystem darauf zu reagieren, noch bevor man weiß, was im Umschlag steckt. Den Brief beiseitezulegen ist ein Vermeidungsreflex – das Nervensystem blockiert vorübergehend eine erwartete Überlastung, wenn die mentalen Reserven bereits erschöpft sind.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>Die Trauma- und Stresspsychophysiologie – insbesondere Bruce McEwens Konzept der <em>allostatischen Last</em> (1998) sowie Forschung zu unkontrollierbaren Stressoren – zeigt: Wenn ein Mensch chronischen, unvorhersehbaren und folgenreichen Forderungen einer Autorität ausgesetzt ist (wie einem Jobcenter, Wohnungsamt oder Inkassobüro), schaltet die Amygdala des Gehirns in einen dauerhaften Zustand der Hypervigilanz. Jeder behördliche Brief trägt die statistische Wahrscheinlichkeit schlechter Nachrichten in sich – eine Sanktion, eine verpasste Frist, eine Rückforderung oder ein invasiver Fragebogen.</p>
+      <p>Wenn dein Nervensystem bereits nahe an seiner Belastungsgrenze arbeitet, löst das Öffnen eines Umschlags eine akute Kampf-Flucht-Erstarrungs-Reaktion aus. Einzufrieren oder den Brief wegzulegen ist keine Prokrastination; es ist eine unwillkürliche physiologische Notbremse. Das Gehirn kalkuliert, dass die aktuelle mentale Bandbreite keinen weiteren Schlag verkraftet, und verriegelt die Tür, um dich vor einer akuten Dekompensation zu schützen.</p>
+
+      <h4>Mitgefühl für die eigenen Reaktionen zurückgewinnen</h4>
+      <p>Sich dafür zu schämen, einen Umschlag nicht zu öffnen, fügt einem bereits überlasteten Nervensystem sekundären Stress hinzu. Zu verstehen, dass Vermeidung ein physischer Überlebensreflex ist, verändert alles: Du bist nicht schwach; dein Nervensystem ist schlicht erschöpft davon, ständig auf den nächsten Aufprall gefasst zu sein.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Gib dir die Erlaubnis innezuhalten. Wenn du diesen Brief schließlich öffnest – ob heute, morgen oder wenn du dir Unterstützung geholt hast –, tu es behutsam, in dem Wissen, dass das Zögern die Art deines Körpers war, dich zu schützen, bis du die Kraft zum Hinsehen hattest.</p>
+    `
+  },
+  'essay-4': {
+    title: '4. Arbeit und Geld – eine schwierige Rechnung: Die Bandbreiten-Steuer der Knappheit',
+    body: `
+      <p>Die Verhaltensforschung zum Thema Knappheit zeigt, dass das ständige Kalkulieren engster Spielräume enorme Mengen kognitiver Bandbreite verschlingt. Wenn die Rechnung den tatsächlichen Lebensstandard kaum verändert – oder das wenige an Sicherheit zu destabilisieren droht –, ist Zögern kein Mangel an Antrieb, sondern eine rationale Antwort auf eine hochriskante Gleichung.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>In ihren wegweisenden Verhaltensstudien zur Knappheit (<em>Scarcity</em>, 2013; Mani et al., <em>Science</em>, 2013) sowie in Pamela Herds und Donald Moynihans Forschung zu <em>Administrative Burden</em> (2018) wurde nachgewiesen, dass ein Leben mit knappen finanziellen und administrativen Spielräumen die kognitive Bandbreite des Gehirns ähnlich stark belastet wie Schlafentzug oder Fieber.</p>
+      <p>Wenn jeder einzelne Euro akribisch einkalkuliert werden muss, wird dein Gehirn zu einer ununterbrochenen Hintergrundrechnung gezwungen. Hinzu kommt, dass in vielen modernen Sicherungssystemen die Aufnahme einer schlecht bezahlten oder prekären befristeten Arbeit sofortige bürokratische Komplikationen auslöst – Wegfall von Wohngeld, Neuberechnung von Leistungen, plötzliche Rückforderungen bei abweichenden Schätzungen und hohe Fahrtkosten –, was unterm Strich zu nahezu null finanziellem Mehrwert führt.</p>
+
+      <h4>Die Rationalität des Zögerns</h4>
+      <p>Außenstehende missdeuten Zögern oft als Bequemlichkeit. In Wirklichkeit ist es hochkomplexes Risikomanagement. Warum sollte man berechenbare Stabilität und massiven Verwaltungsaufwand gegen einen erschöpfenden Job eintauschen, der einen genauso mittellos und völlig ausgelaugt zurücklässt?</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Deine Zurückhaltung, dich blindlings in schlecht bezahlte, hochbelastende Arbeit zu stürzen, ist kein Mangel an Arbeitsmoral; es ist intelligente Überlebensmathematik. Du schützt deine Energie vor schlechten Investitionen.</p>
+    `
+  },
+  'essay-5': {
+    title: '5. Jahre voller Bewerbungen und Absagen: Die Falle der erlernten Hilflosigkeit',
+    body: `
+      <p>Wenn anhaltende Anstrengung dauerhaft kein vorhersehbares Ergebnis bringt, führt dies in der Psychologie zur erlernten Hilflosigkeit – einem Zustand, in dem das Gehirn die Motivation herunterfährt, um Energie vor vergeblicher Mühe zu sparen. Schließlich wird äußere Ablehnung verinnerlicht und untergräbt das grundlegende Gefühl der Selbstwirksamkeit.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>Die von Martin Seligman begründete Theorie der erlernten Hilflosigkeit (1975; weiterentwickelt mit Steven Maier, 2016), Albert Banduras Forschung zur Selbstwirksamkeit (1997) sowie die Metaanalyse von Paul &amp; Moser (2009) zu den psychischen Folgen anhaltender Erwerbslosigkeit erklärt, wie lebende Systeme auf nicht-kontingente Umgebungen reagieren – also Situationen, in denen dein Handeln keinen verlässlichen Einfluss auf das Ergebnis hat. Wenn du Hunderte individueller Bewerbungen verschickst, Ghosting, automatisierte Absagen und oberflächliche Gespräche erlebst, registriert dein Gehirn ein klares Muster: Anstrengung führt nicht zu Belohnung.</p>
+      <p>Um einen totalen psychischen Zusammenbruch zu verhindern, passt sich das Gehirn an, indem es Motivation und Erwartungshaltung drosselt. Das ist kein moralischer Verfall, sondern eine schützende Dämpfung von Hoffnung, die den wiederholten Schmerz der Ablehnung abfedern soll.</p>
+
+      <h4>Deine Handlungsfähigkeit zurückerobern</h4>
+      <p>Wenn der Arbeitsmarkt wie eine Blackbox funktioniert, verinnerlicht man Absagen leicht. Erinnere dich daran, dass Bewerbungsalgorithmen, Altersdiskriminierung, Lebenslauffilter und wirtschaftliche Reibungen nichts mit deinen tatsächlichen Fähigkeiten oder Talenten zu tun haben.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Deine Erschöpfung nach Jahren verschlossener Türen ist vollkommen berechtigt. Das System hat keinen verlässlichen Weg geboten – nicht weil deine Bemühungen wertlos waren, sondern weil der Mechanismus kaputt ist.</p>
+    `
+  },
+  'essay-6': {
+    title: '6. Isolation: Das stille Schrumpfen der sozialen Welt',
+    body: `
+      <p>Langzeitarbeitslosigkeit verengt unmerklich die soziale Welt eines Menschen – sowohl weil Teilhabe Geld kostet als auch weil unsere Kultur Erwerbslosigkeit stark stigmatisiert. Soziologen beobachten, dass stigmatisierte Erfahrungen oft zur Selbstisolation führen: Menschen ziehen sich zurück, um ungebetenen Ratschlägen, subtilen Vergleichen oder ständigen Erklärungen gegenüber Freunden aus dem Weg zu gehen, deren Alltag in einer völlig anderen Spur verläuft.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>Erving Goffmans Arbeiten zum sozialen Stigma (1963), die Marienthal-Studie (1933) zum Schrumpfen sozialer Zeit- und Beziehungsräume sowie Gesundheitsdaten des Robert Koch-Instituts (Kroll &amp; Lampert) zeigen, wie Menschen, die ein unsichtbares oder abgewertetes Stigma tragen, ganz natürlich beginnen, Informationen durch Rückzug zu steuern. Soziale Interaktionen erfordern Ressourcen: einen Kaffee kaufen, Fahrtkosten bezahlen, sich nach sozialen Standards kleiden und – vor allem – über die kommunikative Bandbreite verfügen, gute Laune darzustellen.</p>
+      <p>Wenn das Geld knapp ist und die Energie von der Bürokratie aufgebraucht wird, wird Geselligkeit zu einer anstrengenden Aufführung. Freunde mit sicheren Jobs bieten oft toxische Positivität oder gut gemeinte Ratschläge („Hast du mal versucht, deinen Lebenslauf zu aktualisieren?“), was die Entfremdung unbeabsichtigt vertieft und Menschen in die sichere Einsamkeit zurückzieht.</p>
+
+      <h4>Alleinsein vs. Isolation</h4>
+      <p>Während Isolation schmerzen kann, kann bewusstes Alleinsein auch ein Schutzraum vor Bewertung werden. Zu erkennen, dass dein Rückzug ein vorübergehender Schutzschild gegen soziales Unverständnis ist, mildert die Selbstvorwürfe.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Du schuldest niemandem eine Erklärung oder die Inszenierung von Geschäftigkeit. Deinen Frieden im Rückzug zu schützen ist vollkommen legitim, während du deine Kräfte sammelst.</p>
+    `
+  },
+  'essay-7': {
+    title: '7. Wenn das Jobcenter dein ganzes Leben bestimmt: Administrative Bandbreiten-Taxierung',
+    body: `
+      <p>Die Forschung zur kognitiven Belastung zeigt: Wenn Überleben und Regelkonformität jeden Tag den Vordergrund des Geistes einnehmen, wird die Kapazität des Gehirns für Neugier, Kreativität oder langfristiges Denken verdrängt. In ständiger administrativer Alarmbereitschaft zu leben, lässt kaum Bandbreite für irgendetwas außerhalb des Systems.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>Bürokratische Compliance ist Arbeit – unbezahlte, hochriskante kognitive Arbeit. Fristen im Blick zu behalten, Kontoauszüge zusammenzustellen, auf Anhörungen zu antworten, sich auf Termine vorzubereiten und verklausulierte Bescheide zu entschlüsseln, beansprucht die exekutiven Funktionen.</p>
+      <p>Psychologische Studien zur kognitiven Belastung (Cognitive Load Theory) sowie Herd &amp; Moynihans Analyse von <em>Learning- und Compliance-Kosten</em> (2018) belegen, dass die fluide Intelligenz und die Fähigkeit zur langfristigen Planung stark sinken, wenn das Arbeitsgedächtnis dauerhaft mit dringenden Pflichten belegt ist. Man kann keine berufliche Neuorientierung planen oder von der Zukunft träumen, wenn das unmittelbare Überleben davon abhängt, bis Donnerstag ein Formular fehlerfrei auszufüllen.</p>
+
+      <h4>Die unsichtbare Arbeit anerkennen</h4>
+      <p>Du arbeitest jeden Tag hart – nicht unbedingt in einem klassischen Job, sondern in dem zermürbenden Vollzeitjob, ein auf Reibung ausgelegtes Verwaltungssystem zu managen.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Wenn du das Gefühl hast, keine Energie mehr für Hobbys oder große Träume zu haben, mach dir keine Vorwürfe. Deine mentale Bandbreite war vollständig damit ausgelastet, die Maschinerie am Laufen zu halten.</p>
+    `
+  },
+  'essay-8': {
+    title: '8. Die Niedriglohn-Falle (Arbeiten für Pfennige): Die rationale Ökonomie von Zeit und Überleben',
+    body: `
+      <p>Wenn schlecht bezahlte Jobs kaum oder gar keinen finanziellen Vorteil gegenüber der Grundsicherung bieten, stehen Menschen vor einem harten ökonomischen Dilemma: sich in erschöpfender Arbeit für einen verschwindend geringen Nettogewinn aufzureiben oder die eigene Zeit zu bewahren, während man finanziell genauso prekär dasteht. Dieser Konflikt ist eine rationale ökonomische Kalkulation, kein Mangel an Fleiß.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>Arbeitsökonomie, Verhaltensforschung (einschließlich Kahneman &amp; Tverskys Verlustaversion, 1979) sowie empirische Befunde zu Transferentzugsraten im Niedriglohnsektor zeigen übereinstimmend, dass Menschen Erwerbsarbeit anhand des Nettogrenznutzens bewerten – unter Einbeziehung von Pendelkosten, Arbeitskleidung, wegfallenden Leistungen, Kürzungen beim Wohngeld und körperlichem Verschleiß. Wenn die finanzielle Verbesserung einer 40-Stunden-Woche unter harten Bedingungen nach Abzug aller Kosten gegen null geht, bricht der wirtschaftliche Anreiz zusammen.</p>
+      <p>Die Gesellschaft stellt dies oft als moralisches Versagen dar, doch die Verhaltenswissenschaft zeigt, dass es sich um glasklare, rationale Kalkulation handelt. Menschen wollen sinnvolle Arbeit; was sie ablehnen, ist Ausbeutung im Gewand einer Chance.</p>
+
+      <h4>Deine ökonomische Klarheit würdigen</h4>
+      <p>Zu erkennen, dass deine Zeit, deine körperliche Gesundheit und deine geistige Unversehrtheit einen eigenen Wert haben, ist kein Zynismus – es ist tiefe Selbstachtung.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Sich zu weigern, das eigene Leben für einen verschwindend geringen Ertrag einzutauschen, ist ein Zeichen gesunden Selbstwertgefühls. Du kennst deinen Wert besser als ein ausbeuterischer Markt.</p>
+    `
+  },
+  'essay-9': {
+    title: '9. Die Hochseil-Realität: Leben ohne Sicherheitspuffer',
+    body: `
+      <p>Für Menschen mit finanziellen Rücklagen oder Sicherheitsnetzen ist ein Fehler, eine verpasste Frist oder ein gescheitertes Vorstellungsgespräch eine Unannehmlichkeit – eine vorübergehende Bodenwelle. In einem Prekaritätssystem hingegen sind die finanziellen und administrativen Strafen asymmetrisch: Ein einziger Fehltritt kann sofort eine existenzielle Krise auslösen. Die Knappheitsforschung zeigt, dass ein Leben ohne Sicherheitsnetz zu chronischer Hypervigilanz zwingt, weil jede Routineentscheidung maximale Risiken birgt. Zu erwarten, dass jemand entspannt oder optimistisch bleibt, während er ohne Netz über ein Hochseil balanciert, ignoriert die Realität eines Lebens ohne Puffer.</p>
+
+      <h4>Was die Forschung zeigt</h4>
+      <p>Risikoasymmetrie ist eines der prägenden Merkmale wirtschaftlicher Prekarität (dokumentiert u. a. in der Knappheitsforschung von Mullainathan &amp; Shafir sowie in IAB-Studien zu den materiellen und psychosozialen Folgen von Leistungsminderungen im SGB II). Wohlhabende oder abgesicherte Menschen können Schocks abfedern – eine Autopanne, eine Arztrechnung, eine verspätete Zahlung –, ohne dass sich ihr Lebensweg ändert. Für jemanden ohne finanzielle Reserven löst exakt derselbe Schock Wohnungsverlust, Stromsperren, Schuldenspiralen und behördliche Sanktionen aus.</p>
+      <p>Diese ständige Konfrontation mit katastrophalen Konsequenzen hält das Nervensystem in einem dauerhaften Alarmzustand. Hypervigilanz ist die rationale Anpassung des Gehirns an eine Umgebung, in der ein einziger Fehler unbegrenzte negative Folgen hat.</p>
+
+      <h4>Die Erwartung von Gelassenheit loslassen</h4>
+      <p>Wenn du dich ständig unter Strom fühlst, liegt das daran, dass dein Alltag das Balancieren auf einem Drahtseil ohne Netz erfordert. Von dir selbst zu erwarten, dich in einer Null-Puffer-Zone unbeschwert zu fühlen, ist so, als würde man jemanden bitten, sich zu entspannen, während er unter Wasser die Luft anhält.</p>
+      <p><strong>Ein Gedanke zum Mitnehmen:</strong> Deine Wachsamkeit ist ein Zeugnis deiner Ausdauer. Du hast bisher jeden hochriskanten Moment mit deinem Verstand und deiner Widerstandskraft überstanden. Sei sanft mit dir selbst – du verdienst ein Sicherheitsnetz.</p>
+    `
+  }
+};
+
+function openModal(essayId) {
+  const data = essays[essayId];
+  if (!data) return;
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-body').innerHTML = data.body;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOutsideClick(event) {
+  if (event.target.id === 'modal-overlay') {
+    closeModal();
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+document.getElementById('saveTxt').addEventListener('click', () => {
+  const text = document.getElementById('thought').value;
+  if (!text.trim()) return;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'wieder-ich-notizen.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('clearAll').addEventListener('click', () => {
+  document.getElementById('thought').value = '';
+});
+
+function openLegal(){var h=location.hash.slice(1);if(h==='impressum'||h==='datenschutz'){var d=document.getElementById(h);if(d){d.open=true;d.scrollIntoView();}}}
+window.addEventListener('hashchange',openLegal);document.addEventListener('DOMContentLoaded',openLegal);window.addEventListener('load',openLegal);
+</script>
+</body>
+</html>
