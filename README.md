@@ -2,7 +2,7 @@
 
 > *Du bist mehr als deine Fallakte.* – Was Bürokratie, Knappheit und Verwaltungsdruck mit Menschen machen.
 
-- **Live-Version:** https://wiederichde.netlify.app/
+- **Live-Version:** https://wieterich.github.io/
 - **Architektur:** 100 % clientseitiges, statisches HTML/CSS/JavaScript – kein Backend-Server, keine Datenbank, keine Cookies, kein Tracking, keine Analyse-Tools und keine Verbindung zu Behörden.
 - **Lizenz:** MIT-Lizenz (siehe `LICENSE`)
 
